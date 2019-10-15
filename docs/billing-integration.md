@@ -22,7 +22,7 @@ Usage reporting requires the following information:
 
 ## The Reporting `secret` Resource
 
-During the deployment of a Kubernetes app, GCP Marketplace will create a `secret` resource containing the **service account key** and **consumer ID** referenced above. The exact name of the created resource will be passed to your application via a  parameter defined in [schema.yaml](https://github.com/GoogleCloudPlatform/marketplace-k8s-app-tools/blob/master/docs/schema.md) with the special `REPORTING_SECRET` annotation.
+During the deployment of a Kubernetes app in the UI (not via CLI with `mpdev`), GCP Marketplace will create a `secret` resource containing the **service account key** and **consumer ID** referenced above. The exact name of the created resource will be passed to your application via a  parameter defined in [schema.yaml](https://github.com/GoogleCloudPlatform/marketplace-k8s-app-tools/blob/master/docs/schema.md) with the special `REPORTING_SECRET` annotation.
 
 For example, the following `schema.yaml` snippet results in a property named `$myReportingSecret` being populated with the name of the generated secret resource.
 ```yaml
@@ -214,7 +214,7 @@ The important aspects of the above examples include:
 * The metering agent's config is included as a value named `config.yaml` within a config-map.
 * This config-map is mounted as a volume at `/etc/ubbagent` in the ubbagent container, making the config file available to the agent at `/etc/ubbagent/config.yaml`. This value is passed to the agent sidecar using the special `$AGENT_CONFIG_FILE` environment variable.
 * The agent is instructed to listen on port `4567` using the special `$AGENT_LOCAL_PORT` environment variable. Note that this value must be quoted since environment variable values must be strings.
-* The name of the reported secret created at deployment time is stored in the `reportingSecret` parameter.
+* The name of the reported secret created at deployment time from the UI (not in CLI deployment with `mpdev`) is stored in the `reportingSecret` parameter.
 * The `config.yaml` file references two additional environment variables, `$AGENT_ENCODED_KEY` and `$AGENT_CONSUMER_ID`. The values for these variables are piped through from the above reporting secret using `secretKeyRef` sections. Note that the `AGENT_ENCODED_KEY` and `AGENT_CONSUMER_ID` names aren't special; any valid environment variable names can be used as long as they're consistent in the agent configuration and `env` sections.
 
 With this configuration in place, the application can send usage reports to the agent at `http://localhost:4567`.

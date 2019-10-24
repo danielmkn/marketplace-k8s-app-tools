@@ -65,9 +65,10 @@ def main():
                 GOOGLE_CLOUD_TEST) == 'test':
       print("INFO Tester resource: {}".format(full_name))
       set_resource_ownership(
-          app_uid=args.app_uid,
-          app_name=args.app_name,
-          app_api_version=args.app_api_version,
+          owner_uid=args.app_uid,
+          owner_name=args.app_name,
+          owner_api_version=args.app_api_version,
+          owner_kind='Application'
           resource=resource)
       test_resources.append(resource)
     else:

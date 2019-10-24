@@ -67,6 +67,14 @@ def main():
       help="The apiVersion of the Application CRD",
       required=True)
   parser.add_argument(
+      "--deployer_name",
+      help="The name of the deployer service account",
+      required=True)
+  parser.add_argument(
+      "--deployer_uid",
+      help="The uid of the deployer service account",
+      required=True)
+  parser.add_argument(
       "--manifests",
       help="The folder containing the manifest templates, "
       "or - to read from stdin",
@@ -141,9 +149,10 @@ def dump(outfile, resources, included_kinds, app_name, app_uid,
                resource["kind"], resource["metadata"]["name"])
       resource = copy.deepcopy(resource)
       set_resource_ownership(
-          app_uid=app_uid,
-          app_name=app_name,
-          app_api_version=app_api_version,
+          owner_uid=app_uid,
+          owner_name=app_name,
+          owner_api_version=app_api_version,
+          owner_kind='Application',
           resource=resource)
     to_be_dumped.append(resource)
   yaml.safe_dump_all(to_be_dumped, outfile, default_flow_style=False, indent=2)

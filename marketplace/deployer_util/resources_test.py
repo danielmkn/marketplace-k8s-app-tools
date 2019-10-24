@@ -18,6 +18,7 @@ from resources import set_resource_ownership
 APP_API_VERSION = 'v1beta1'
 APP_NAME = 'wordpress-1'
 APP_UID = '00000000-1111-2222-3333-444444444444'
+APP_KIND = 'Application'
 OTHER_UID = '99999999-9999-9999-9999-999999999999'
 APP_OWNER_REF = {
     'apiVersion': APP_API_VERSION,
@@ -33,13 +34,11 @@ class ResourcesTest(unittest.TestCase):
   def assertListElementsEqual(self, list1, list2):
     return self.assertEqual(sorted(list1), sorted(list2))
 
-
-# def set_resource_ownership(app_uid, app_name, app_api_version, resource):
-
   def test_resource_existing_app_ownerref_matching_uid_updates_existing(self):
     resource = {'metadata': {'ownerReferences': [{'uid': APP_UID}]}}
 
-    set_resource_ownership(APP_UID, APP_NAME, APP_API_VERSION, resource)
+    set_resource_ownership(APP_UID, APP_NAME, APP_API_VERSION, APP_KIND,
+                           resource)
 
     self.assertListElementsEqual(resource['metadata']['ownerReferences'],
                                  [APP_OWNER_REF])
@@ -47,7 +46,8 @@ class ResourcesTest(unittest.TestCase):
   def test_resource_existing_app_ownerref_different_uid_adds_ownerref(self):
     resource = {'metadata': {'ownerReferences': [{'uid': OTHER_UID}]}}
 
-    set_resource_ownership(APP_UID, APP_NAME, APP_API_VERSION, resource)
+    set_resource_ownership(APP_UID, APP_NAME, APP_API_VERSION, APP_KIND,
+                           resource)
 
     self.assertListElementsEqual(resource['metadata']['ownerReferences'], [{
         'uid': OTHER_UID
@@ -56,7 +56,8 @@ class ResourcesTest(unittest.TestCase):
   def test_resource_no_ownerrefs_adds_ownerref(self):
     resource = {'metadata': {'ownerReferences': []}}
 
-    set_resource_ownership(APP_UID, APP_NAME, APP_API_VERSION, resource)
+    set_resource_ownership(APP_UID, APP_NAME, APP_API_VERSION, APP_KIND,
+                           resource)
 
     self.assertListElementsEqual(resource['metadata']['ownerReferences'],
                                  [APP_OWNER_REF])

@@ -6,7 +6,7 @@ include common.Makefile
 include gcloud.Makefile
 include marketplace.Makefile
 
-TEST_ID := $(shell cat /dev/urandom | tr -dc 'a-z0-9' | head -c 8)
+TEST_ID := $(shell cat /dev/urandom | LC_CTYPE=C tr -dc 'a-z0-9' | head -c 8)
 
 .tests/marketplace/deployer/helm_tiller_onbuild:
 	mkdir -p "$@"
